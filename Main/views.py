@@ -9,6 +9,6 @@ from .models import *
 
 
 class IndexPageFormView(BaseClassContextMixin, ListView):
-    title = 'Главная страница'
+    title = 'Система маркировки'
     template_name = 'Main/index.html'
     model = ModelDocuments
