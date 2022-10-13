@@ -8,6 +8,17 @@ from django.db import models
 # Create your models here.
 
 
+class ModelCisStatuses(models.Model):
+    status_name = models.CharField(primary_key=True, max_length=128, verbose_name='Статус ЧЗ')
+    status_local_name = models.CharField(max_length=128, verbose_name='Описание статуса')
+    status_correct = models.IntegerField(default=0, verbose_name='Разрешена приемка')
+    valid_to = models.DateField(default=datetime.date(2000, 1, 1), verbose_name='Действителен ДО')
+
+    class Meta:
+        db_table = 'cis_statuses'
+        managed = False
+
+
 class ModelCheckStatuses(models.Model):
     status_id = models.IntegerField(primary_key=True, editable=False, auto_created=True, verbose_name='ID статуса')
     status_name = models.CharField(max_length=128, verbose_name='Статус проверки')
@@ -86,6 +97,16 @@ class ModelOrders(models.Model):
 
 
 class ModelIncomes(models.Model):
+    guid = models.CharField(editable=False, primary_key=True, max_length=64, default=uuid.uuid4(),
+                            verbose_name='GUID Прихода')
+    internal_document_number = models.CharField(editable=False, max_length=128,
+                                                verbose_name='Внутренний номер документа')
+    external_document_number = models.CharField(editable=False, max_length=128,
+                                                verbose_name='Номер документа контрагента')
+    document_date = models.DateField(editable=False, default=datetime.date(2000, 1, 1), verbose_name='Дата документа')
+    document_fobj = models.CharField(editable=False, max_length=64, verbose_name='Указатель')
+    erp_status_id = models.ForeignKey(ModelErpStatuses, on_delete=models.DO_NOTHING, verbose_name='Статус документа')
+
     class Meta:
         db_table = 'incomes'
         managed = False
@@ -142,7 +163,7 @@ class ModelWares(models.Model):
 
 
 class ModelDocumentContractorCis(models.Model):
-    document_guid = models.ForeignKey(ModelDocuments, on_delete=models.CASCADE, verbose_name='GUID Документа')
+    document_guid = models.ForeignKey(ModelDocuments, on_delete=models.CASCADE, verbose_name='Документ')
     internal_ware_code = models.ForeignKey(ModelWares, db_column='contractor_warecode', on_delete=models.DO_NOTHING,
                                            verbose_name='Товар'),
     contractor_ware_code = models.CharField(db_column='contractor_warecode', editable=False, max_length=128,
@@ -158,18 +179,50 @@ class ModelDocumentContractorCis(models.Model):
 
 
 class ModelDocumentDetailedCis(models.Model):
+    document_guid = models.ForeignKey(ModelDocuments, on_delete=models.CASCADE, verbose_name='Документ')
+    owner_guid = models.ForeignKey(ModelContractors, on_delete=models.CASCADE, verbose_name='Контрагент')
+    contractor_ware_code = models.CharField(db_column='contractor_warecode', editable=False, max_length=128,
+                                            verbose_name='ЛК Котрагента')
+    contractor_barcode = models.CharField(editable=False, max_length=128, verbose_name='ШК Контрагента')
+    unit_parent_cis = models.CharField(editable=False, max_length=256, verbose_name='КИЗ/КИТУ Агрегата')
+    unit_cis = models.CharField(editable=False, max_length=256, verbose_name='КИЗ/КИТУ')
+    unit_produced_date = models.DateField(editable=False, default=datetime.date(2000, 1, 1),
+                                          verbose_name='Дата производства')
+    unit_package_type = models.CharField(editable=False, max_length=64, verbose_name='Вид упаковки')
+    unit_status_id = models.ForeignKey(ModelCisStatuses, on_delete=models.DO_NOTHING, verbose_name='Статус ЧЗ')
+    unit_childs = models.FloatField(editable=False, default=0, verbose_name='Дочерних КИЗ/КИТУ')
+    unit_check_error_code = models.CharField(editable=False, max_length=64, default='', verbose_name='Код ошибки ЧЗ')
+    unit_check_error_message = models.CharField(editable=False, max_length=256, verbose_name='Описание ошибки ЧЗ')
+    mrc_value = models.IntegerField(editable=False, default=0, verbose_name='Значение МРЦ')
+
     class Meta:
         db_table = 'document_detailed_cis'
         managed = False
 
 
 class ModelDocumentGrayZone(models.Model):
+    document_guid = models.ForeignKey(ModelDocuments, on_delete=models.CASCADE, verbose_name='Документ')
+    unit_package_type = models.CharField(editable=False, max_length=64, verbose_name='Вид упаковки')
+    unit_parent_cis = models.CharField(editable=False, max_length=256, verbose_name='КИЗ/КИТУ Агрегата')
+    unit_cis = models.CharField(editable=False, max_length=256, verbose_name='Виртуальный КИЗ/КИТУ')
+    unit_cis_original = models.CharField(editable=False, max_length=256, verbose_name='Исходный КИЗ/КИТУ')
+    contractor_ware_code = models.CharField(db_column='contractor_warecode', editable=False, max_length=128,
+                                            verbose_name='ЛК Контрагента')
+    contractor_barcode = models.CharField(editable=False, max_length=128, verbose_name='ШК Контрагента')
+
     class Meta:
         db_table = 'document_grayzone'
         managed = False
 
 
 class ModelDocumentCheckResult(models.Model):
+    document_guid = models.ForeignKey(ModelDocuments, on_delete=models.CASCADE, verbose_name='Документ')
+    ware_code = models.CharField(editable=False, max_length=32, verbose_name='Артикул товара')
+    ware_name = models.CharField(editable=False, max_length=256, verbose_name='Наименование товара')
+    contractor_cis = models.CharField(max_length=256, editable=False, verbose_name='КИЗ/КИТУ')
+    gtin = models.CharField(max_length=64, editable=False, verbose_name='GTIN')
+    reason = models.CharField(max_length=512, editable=False, verbose_name='Описание ошибки')
+
     class Meta:
         db_table = 'document_check_result'
         managed = False
