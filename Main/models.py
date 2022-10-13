@@ -48,7 +48,7 @@ class ModelMarkTypes(models.Model):
 
 
 class ModelContractors(models.Model):
-    guid = models.CharField(primary_key=True, editable=False, default=uuid.uuid4, max_length=64,
+    guid = models.CharField(primary_key=True, editable=False, default=uuid.uuid4(), max_length=64,
                             verbose_name='GUID Контрагента')
     contractor_name = models.CharField(max_length=150, verbose_name='Наименование')
     contractor_inn = models.CharField(max_length=32, verbose_name='ИНН')
@@ -72,11 +72,11 @@ class ModelContractorContacts(models.Model):
 
 
 class ModelDocuments(models.Model):
-    guid = models.CharField(primary_key=True, editable=False, default=uuid.uuid4, max_length=64,
+    guid = models.CharField(primary_key=True, editable=False, default=uuid.uuid4(), max_length=64,
                             verbose_name='GUID Документа')
     contractor_guid = models.ForeignKey(ModelContractors, on_delete=models.CASCADE, verbose_name='Контрагент')
-    order_guid = models.CharField(max_length=64, default=uuid.uuid4, verbose_name='Заказ')
-    income_guid = models.CharField(max_length=64, default=uuid.uuid4, verbose_name='Приход')
+    order_guid = models.CharField(max_length=64, default=uuid.uuid4(), verbose_name='Заказ')
+    income_guid = models.CharField(max_length=64, default=uuid.uuid4(), verbose_name='Приход')
     document_date = models.DateField(verbose_name='Дата документа')
     document_number = models.CharField(max_length=128, verbose_name='Номер документа')
     document_name = models.CharField(max_length=512, verbose_name='Наименование документа')
