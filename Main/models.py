@@ -6,10 +6,11 @@ from django.db import models
 
 
 class ModelCisStatuses(models.Model):
-    status_name = models.CharField(primary_key=True, max_length=128, verbose_name='Статус ЧЗ')
-    status_local_name = models.CharField(max_length=128, verbose_name='Описание статуса')
-    status_correct = models.IntegerField(default=0, verbose_name='Разрешена приемка')
-    valid_to = models.DateField(default=datetime.date(2000, 1, 1), verbose_name='Действителен ДО')
+    status_name = models.CharField(null=False, primary_key=True, default='EMPTY', max_length=128,
+                                   verbose_name='Статус ЧЗ')
+    status_local_name = models.CharField(null=False, default='Пустой', max_length=128, verbose_name='Описание статуса')
+    status_correct = models.IntegerField(null=False, default=0, verbose_name='Разрешена приемка')
+    valid_to = models.DateField(null=False, default=datetime.date(2000, 1, 1), verbose_name='Действителен ДО')
 
     class Meta:
         db_table = 'cis_statuses'
@@ -17,9 +18,10 @@ class ModelCisStatuses(models.Model):
 
 
 class ModelCheckStatuses(models.Model):
-    status_id = models.IntegerField(primary_key=True, editable=False, auto_created=True, verbose_name='ID статуса')
-    status_name = models.CharField(max_length=128, verbose_name='Статус проверки')
-    finished = models.IntegerField(default=0, verbose_name='Конечный статус')
+    status_id = models.IntegerField(null=False, primary_key=True, editable=False, auto_created=True,
+                                    verbose_name='ID статуса')
+    status_name = models.CharField(null=False, default='Неизвестно', max_length=128, verbose_name='Статус проверки')
+    finished = models.IntegerField(null=False, default=0, verbose_name='Конечный статус')
 
     class Meta:
         db_table = 'check_statuses'
@@ -27,9 +29,11 @@ class ModelCheckStatuses(models.Model):
 
 
 class ModelDocumentStatuses(models.Model):
-    status_id = models.IntegerField(primary_key=True, editable=False, auto_created=True, verbose_name='ID статуса')
-    status_description = models.CharField(max_length=512, verbose_name='Статус документа')
-    status_level = models.IntegerField(default=-1, verbose_name='Уровень статуса')
+    status_id = models.IntegerField(null=False, primary_key=True, editable=False, auto_created=True,
+                                    verbose_name='ID статуса')
+    status_description = models.CharField(null=False, default='Нет описания', max_length=512,
+                                          verbose_name='Статус документа')
+    status_level = models.IntegerField(null=False, default=-1, verbose_name='Уровень статуса')
 
     class Meta:
         db_table = 'document_statuses'
@@ -37,8 +41,9 @@ class ModelDocumentStatuses(models.Model):
 
 
 class ModelErpStatuses(models.Model):
-    status_id = models.IntegerField(primary_key=True, editable=False, auto_created=True, verbose_name='ID статуса')
-    status_description = models.CharField(max_length=512, verbose_name='Статус ERP')
+    status_id = models.IntegerField(null=False, primary_key=True, editable=False, auto_created=True,
+                                    verbose_name='ID статуса')
+    status_description = models.CharField(null=False, default='Нет описания', max_length=512, verbose_name='Статус ERP')
 
     class Meta:
         db_table = 'erp_statuses'
@@ -46,10 +51,12 @@ class ModelErpStatuses(models.Model):
 
 
 class ModelMarkTypes(models.Model):
-    id = models.IntegerField(primary_key=True, editable=False, auto_created=True, verbose_name='ID Вида Маркировки')
-    description = models.CharField(max_length=512, verbose_name='Описание вида маркировки')
-    hs_flag = models.CharField(max_length=64, verbose_name='Вид продукции ВМС')
-    ts_group_code = models.IntegerField(default=0, verbose_name='ID Системы "Честный знак"')
+    id = models.IntegerField(null=False, primary_key=True, editable=False, auto_created=True,
+                             verbose_name='ID Вида Маркировки')
+    description = models.CharField(null=False, default='Нет описания вида', max_length=512,
+                                   verbose_name='Описание вида маркировки')
+    hs_flag = models.CharField(null=False, default='HS:NONE', max_length=64, verbose_name='Вид продукции ВМС')
+    ts_group_code = models.IntegerField(null=False, default=-1, verbose_name='ID Системы "Честный знак"')
 
     class Meta:
         db_table = 'mark_types'
