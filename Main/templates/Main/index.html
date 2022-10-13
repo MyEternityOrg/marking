@@ -1,5 +1,11 @@
 {% load static %}
+{% load verbose_names %}
 {% include 'base.html' %}
 {% block content %}
     <h4>Система маркировки</h4>
+    {% for object in object_list %}
+        <p>{% get_verbose_field_name object "contractor_guid" %}</p>
+        <p>{{ object.contractor_guid.contractor_name }}</p>
+    {% endfor %}
+    {% include 'pagination.html' %}
 {% endblock %}

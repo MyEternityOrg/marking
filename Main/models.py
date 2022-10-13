@@ -132,21 +132,25 @@ class ModelIncomeData(models.Model):
 class ModelDocuments(models.Model):
     guid = models.CharField(primary_key=True, editable=False, default=uuid.uuid4(), max_length=64,
                             verbose_name='GUID Документа')
-    contractor_guid = models.ForeignKey(ModelContractors, on_delete=models.CASCADE, verbose_name='Контрагент')
-    order_guid = models.ForeignKey(ModelOrders, on_delete=models.DO_NOTHING, verbose_name='Заказ')
-    income_guid = models.ForeignKey(ModelIncomes, on_delete=models.DO_NOTHING, verbose_name='Приход')
+    contractor_guid = models.ForeignKey(ModelContractors, db_column='contractor_guid', on_delete=models.CASCADE,
+                                        verbose_name='Контрагент')
+    order_guid = models.ForeignKey(ModelOrders, db_column='order_guid', on_delete=models.DO_NOTHING,
+                                   verbose_name='Заказ')
+    income_guid = models.ForeignKey(ModelIncomes, db_column='income_guid', on_delete=models.DO_NOTHING,
+                                    verbose_name='Приход')
     document_date = models.DateField(verbose_name='Дата документа')
     document_number = models.CharField(max_length=128, verbose_name='Номер документа')
     document_name = models.CharField(max_length=512, verbose_name='Наименование документа')
     document_id = models.CharField(max_length=128, verbose_name='Идентификатор ЭДО')
-    check_status_id = models.ForeignKey(ModelCheckStatuses, on_delete=models.DO_NOTHING,
+    check_status_id = models.ForeignKey(ModelCheckStatuses, db_column='check_status_id', on_delete=models.DO_NOTHING,
                                         verbose_name='Статус проверки ЧЗ')
     whitelisted = models.IntegerField(editable=False, verbose_name='Документ в белом списке')
-    document_status_id = models.ForeignKey(ModelDocumentStatuses, on_delete=models.DO_NOTHING,
+    document_status_id = models.ForeignKey(ModelDocumentStatuses, db_column='document_status_id',
+                                           on_delete=models.DO_NOTHING,
                                            verbose_name='Статус проверки СМ')
-    erp_status_id = models.ForeignKey(ModelErpStatuses, on_delete=models.DO_NOTHING,
+    erp_status_id = models.ForeignKey(ModelErpStatuses, db_column='erp_status_id', on_delete=models.DO_NOTHING,
                                       verbose_name='Статус в ERP системе')
-    allowed_gray_zone = models.IntegerField(default=0, editable=False, verbose_name='Разрешена серая зона')
+    allowed_gray_zone = models.IntegerField(default=0, db_column='allowed_grayzone', editable=False, verbose_name='Разрешена серая зона')
 
     class Meta:
         db_table = 'documents'

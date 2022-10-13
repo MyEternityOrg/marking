@@ -10,3 +10,4 @@ class IndexPageFormView(BaseClassContextMixin, ListView):
     title = 'Система маркировки'
     template_name = 'Main/index.html'
     model = ModelDocuments
+    paginate_by = 50
