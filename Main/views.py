@@ -5,8 +5,6 @@ from django.views.generic.edit import BaseFormView
 from Marking.mixin import *
 from .models import *
 
-# Create your views here.
-
 
 class IndexPageFormView(BaseClassContextMixin, ListView):
     title = 'Система маркировки'

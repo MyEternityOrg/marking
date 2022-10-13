@@ -5,9 +5,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-# Create your models here.
-
-
 class ModelCisStatuses(models.Model):
     status_name = models.CharField(primary_key=True, max_length=128, verbose_name='Статус ЧЗ')
     status_local_name = models.CharField(max_length=128, verbose_name='Описание статуса')
