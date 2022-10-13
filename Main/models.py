@@ -1,3 +1,4 @@
+import datetime
 import uuid
 
 from django.contrib.auth.models import User
@@ -71,12 +72,44 @@ class ModelContractorContacts(models.Model):
         managed = False
 
 
+class ModelOrders(models.Model):
+    guid = models.CharField(primary_key=True, default=uuid.uuid4(), max_length=64, editable=False,
+                            verbose_name='GUID Заказа')
+    order_status = models.BooleanField(default=True, verbose_name='Заказ завершен')
+    order_number = models.CharField(max_length=150, verbose_name='Номер заказа')
+    delivery_date = models.DateField(auto_now_add=False, default=datetime.date(2000, 1, 1), verbose_name='Дата заказа')
+    contractor_guid = models.ForeignKey(ModelContractors, on_delete=models.CASCADE, verbose_name='Контрагент')
+
+    class Meta:
+        db_table = 'orders'
+        managed = False
+
+
+class ModelIncomes(models.Model):
+    class Meta:
+        db_table = 'incomes'
+        managed = False
+
+
+class ModelIncomeData(models.Model):
+    document_guid = models.ForeignKey(ModelIncomes, on_delete=models.CASCADE, verbose_name='Приходная накладная')
+    internal_ware_code = models.CharField(db_column='internal_warecode', editable=False, max_length=256,
+                                          verbose_name='Артикул товара')
+    contractor_ware_count = models.FloatField(db_column='internal_warecount', editable=False, default=0,
+                                              verbose_name='Количество')
+    contractor_cis = models.CharField(editable=False, max_length=256, verbose_name='КИЗ/КИТУ Контрагента')
+
+    class Meta:
+        db_table = 'income_data'
+        managed = False
+
+
 class ModelDocuments(models.Model):
     guid = models.CharField(primary_key=True, editable=False, default=uuid.uuid4(), max_length=64,
                             verbose_name='GUID Документа')
     contractor_guid = models.ForeignKey(ModelContractors, on_delete=models.CASCADE, verbose_name='Контрагент')
-    order_guid = models.CharField(max_length=64, default=uuid.uuid4(), verbose_name='Заказ')
-    income_guid = models.CharField(max_length=64, default=uuid.uuid4(), verbose_name='Приход')
+    order_guid = models.ForeignKey(ModelOrders, on_delete=models.DO_NOTHING, verbose_name='Заказ')
+    income_guid = models.ForeignKey(ModelIncomes, on_delete=models.DO_NOTHING, verbose_name='Приход')
     document_date = models.DateField(verbose_name='Дата документа')
     document_number = models.CharField(max_length=128, verbose_name='Номер документа')
     document_name = models.CharField(max_length=512, verbose_name='Наименование документа')
@@ -92,4 +125,51 @@ class ModelDocuments(models.Model):
 
     class Meta:
         db_table = 'documents'
+        managed = False
+
+
+class ModelWares(models.Model):
+    ware_guid = models.CharField(editable=False, default=uuid.uuid4(), max_length=64, verbose_name='GUID Товара')
+    ware_code = models.CharField(editable=False, max_length=32, verbose_name='Артикул товара')
+    ware_name = models.CharField(editable=False, max_length=150, verbose_name='Наименование товара')
+    ware_data = models.CharField(editable=False, max_length=128, verbose_name='Данные ШК/Кода товара')
+    marked = models.BooleanField(editable=False, default=0, verbose_name='Пометка удаления')
+    lvl1_qty = models.FloatField(editable=False, default=0, verbose_name='Коэффициент упаковки')
+
+    class Meta:
+        db_table = 'wares'
+        managed = False
+
+
+class ModelDocumentContractorCis(models.Model):
+    document_guid = models.ForeignKey(ModelDocuments, on_delete=models.CASCADE, verbose_name='GUID Документа')
+    internal_ware_code = models.ForeignKey(ModelWares, db_column='contractor_warecode', on_delete=models.DO_NOTHING,
+                                           verbose_name='Товар'),
+    contractor_ware_code = models.CharField(db_column='contractor_warecode', editable=False, max_length=128,
+                                            verbose_name='ЛК Контрагента')
+    contractor_barcode = models.CharField(editable=False, max_length=128, verbose_name='ШК Контрагента')
+    contractor_ware_count = models.FloatField(editable=False, db_column='contractor_warecount', default=0,
+                                              verbose_name='Количество')
+    contractor_cis = models.CharField(max_length=256, editable=False, verbose_name='КИЗ/КИТУ')
+
+    class Meta:
+        db_table = 'document_contractor_cis'
+        managed = False
+
+
+class ModelDocumentDetailedCis(models.Model):
+    class Meta:
+        db_table = 'document_detailed_cis'
+        managed = False
+
+
+class ModelDocumentGrayZone(models.Model):
+    class Meta:
+        db_table = 'document_grayzone'
+        managed = False
+
+
+class ModelDocumentCheckResult(models.Model):
+    class Meta:
+        db_table = 'document_check_result'
         managed = False
