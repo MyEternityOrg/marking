@@ -1,0 +1,55 @@
+{% load static %}
+{% block content %}
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-journals"></i> Отчеты
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#"><i
+                                        class="bi bi-truck"></i> Шаблон</a></li>
+                            <li><a class="dropdown-item disabled" href="#"><i class="bi bi-shield-lock-fill"></i> Шаблон (в
+                                процессе разработки)</a></li>
+                        </ul>
+                    </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-building"></i> Справочники
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#"><i
+                                        class="bi bi-list-ul"></i> Шаблон</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-journals"></i> Документы
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#"><i
+                                        class="bi bi-journal-text"></i> Шаблон</a></li>
+                            </ul>
+                        </li>
+                </ul>
+            </div>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <span>
+                    {% if user.is_active %}
+                        <a class="nav-link" href="#"><i class="bi bi-person"></i>
+                            Пользователь: {{ user.username }}<span
+                                    class="sr-only">(current)</span> <i class="bi bi-door-closed"></i></a>
+                    {% else %}
+                        <a class="nav-link" href="#"><i class="bi bi-person"></i> Войти<span
+                                class="sr-only">(current)</span> <i class="fas fa-cog fa-fw"></i></a>
+                    {% endif %}
+                </span>
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
