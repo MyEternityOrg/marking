@@ -64,7 +64,22 @@ class ModelMarkTypes(models.Model):
 
 
 class ModelContractors(models.Model):
-    guid = models.CharField(primary_key=True, editable=False, default=uuid.uuid4(), max_length=64,
+    """
+        Контрагенты
+
+        contractor_guid - Идентификатор контрагента.
+
+        contractor_name - Наименование контрагента.
+
+        contractor_inn - ИНН
+
+        contractor_count_whitelist - Контрагент не проходит проверку количества.
+
+        contractor_quantity_whitelist - Контрагент не проходит проверку качества.
+
+        contractor_mrc_minimal - Минимальная цена товара контрагента.
+    """
+    contractor_guid = models.CharField(primary_key=True, db_column='guid', editable=False, default=uuid.uuid4(), max_length=64,
                             verbose_name='GUID Контрагента')
     contractor_name = models.CharField(max_length=150, verbose_name='Наименование')
     contractor_inn = models.CharField(max_length=32, verbose_name='ИНН')
@@ -72,8 +87,12 @@ class ModelContractors(models.Model):
     contractor_quality_whitelist = models.IntegerField(default=0, verbose_name='Белый список по качеству')
     contractor_mrc_minimal = models.IntegerField(default=0, verbose_name='Контролировать минимальную МРЦ')
 
+    def __str__(self):
+        return f'{self.contractor_name} [{self.contractor_inn}]'
+
     class Meta:
         db_table = 'contractors'
+        ordering = ('contractor_name', )
         managed = False
 
 
@@ -171,7 +190,7 @@ class ModelDocuments(models.Model):
                                    verbose_name='Заказ')
     income_guid = models.ForeignKey(ModelIncomes, db_column='income_guid', on_delete=models.DO_NOTHING,
                                     verbose_name='Приход')
-    document_date = models.DateField(verbose_name='Дата документа')
+    document_date = models.DateField(verbose_name='Дата документа', db_column='document_date', null=False, default=datetime.date(2000, 1, 1))
     document_number = models.CharField(max_length=128, verbose_name='Номер документа')
     document_name = models.CharField(max_length=512, verbose_name='Наименование документа')
     document_id = models.CharField(max_length=128, verbose_name='Идентификатор ЭДО')

@@ -7,7 +7,7 @@ from .views import *
 
 
 urlpatterns = [
-    path('', IndexPageFormView.as_view(), name='index'),
+    path('documents/search/', IndexPageFormView.as_view(), name='index'),
 ]
 
 if settings.DEBUG:
