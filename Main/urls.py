@@ -5,9 +5,11 @@ from django.urls import path, include, re_path
 from django.views.generic.base import RedirectView
 from .views import *
 
+app_name = 'Main'
 
 urlpatterns = [
-    path('documents/search/', IndexPageFormView.as_view(), name='index'),
+    path('', IndexPageFormView.as_view(), name='index'),
+    path('documents/search/', DocumentsListView.as_view(), name='documents'),
 ]
 
 if settings.DEBUG:

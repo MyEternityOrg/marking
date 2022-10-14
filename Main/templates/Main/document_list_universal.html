@@ -1,0 +1,57 @@
+{% load static %}
+{% load verbose_names %}
+{% include 'base.html' %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row row-cols-auto" style="margin-top: 33px;margin-bottom: 8px;">
+{#            <div class="col">#}
+{#                <button class="btn btn-outline-secondary" type="submit" id="new_record"><i#}
+{#                        class="bi bi-plus-square"></i></button>#}
+{#            </div>#}
+            <div class="col">
+                <form method="get">
+                    <div class="row row-cols-auto">
+                        <div class="input-group">
+                            {{ filter.form.document_date }}
+                            {{ filter.form.contractor_guid }}
+                            <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-filter-square"></i>
+                                Отбор
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header"><i class="bi bi-table"></i> Документы</div>
+            <div class="card-body">
+                <table id="datatable" class="table table-bordered table-hover table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th scope="col">Контрагент</th>
+                        <th scope="col">Номер УПД</th>
+                        <th scope="col">Дата УПД</th>
+                        <th scope="col">Статус УПД</th>
+                        <th scope="col">Проверка ЧЗ</th>
+                        <th scope="col">Проверка СМ</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in object_list %}
+                        <tr class="clickable-row_unp" id="update_record"
+                            data-href="#">
+                            <td>{{ item.contractor_guid.contractor_name }}</td>
+                            <td>{{ item.document_number }}</td>
+                            <td>{{ item.document_date }}</td>
+                            <td>{{ item.erp_status_id.status_description }}</td>
+                            <td>{{ item.check_status_id.status_name }}</td>
+                            <td>{{ item.document_status_id.status_description }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% include 'pagination.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
