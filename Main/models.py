@@ -3,9 +3,21 @@ import uuid
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Max
 
 
 class ModelCisStatuses(models.Model):
+    """
+        Статусы КИЗ/КИТУ
+
+        status_name - Наименование статуса в системе ЧЗ
+
+        status_local_name - Локализованное наименование статуса.
+
+        status_correct - Считать статус корректным при проверках.
+
+        valid_to - Статус считается корректным пока действует до указанной даты.
+    """
     status_name = models.CharField(null=False, primary_key=True, default='EMPTY', max_length=128,
                                    verbose_name='Статус ЧЗ')
     status_local_name = models.CharField(null=False, default='Пустой', max_length=128, verbose_name='Описание статуса')
@@ -29,6 +41,15 @@ class ModelCheckStatuses(models.Model):
 
 
 class ModelDocumentStatuses(models.Model):
+    """
+        Статусы проверки документов системой.
+
+        status_id - Код статуса
+
+        status_description - Описание статуса
+
+        status_level - Уровень ошибки статуса (0 - статyс корректен)
+    """
     status_id = models.IntegerField(null=False, primary_key=True, editable=False, auto_created=True,
                                     verbose_name='ID статуса')
     status_description = models.CharField(null=False, default='Нет описания', max_length=512,
@@ -79,8 +100,9 @@ class ModelContractors(models.Model):
 
         contractor_mrc_minimal - Минимальная цена товара контрагента.
     """
-    contractor_guid = models.CharField(primary_key=True, db_column='guid', editable=False, default=uuid.uuid4(), max_length=64,
-                            verbose_name='GUID Контрагента')
+    contractor_guid = models.CharField(primary_key=True, db_column='guid', editable=False, default=uuid.uuid4(),
+                                       max_length=64,
+                                       verbose_name='GUID Контрагента')
     contractor_name = models.CharField(max_length=150, verbose_name='Наименование')
     contractor_inn = models.CharField(max_length=32, verbose_name='ИНН')
     contractor_count_whitelist = models.IntegerField(default=0, verbose_name='Белый список по количеству')
@@ -92,7 +114,7 @@ class ModelContractors(models.Model):
 
     class Meta:
         db_table = 'contractors'
-        ordering = ('contractor_name', )
+        ordering = ('contractor_name',)
         managed = False
 
 
@@ -190,7 +212,8 @@ class ModelDocuments(models.Model):
                                    verbose_name='Заказ')
     income_guid = models.ForeignKey(ModelIncomes, db_column='income_guid', on_delete=models.DO_NOTHING,
                                     verbose_name='Приход')
-    document_date = models.DateField(verbose_name='Дата документа', db_column='document_date', null=False, default=datetime.date(2000, 1, 1))
+    document_date = models.DateField(verbose_name='Дата документа', db_column='document_date', null=False,
+                                     default=datetime.date(2000, 1, 1))
     document_number = models.CharField(max_length=128, verbose_name='Номер документа')
     document_name = models.CharField(max_length=512, verbose_name='Наименование документа')
     document_id = models.CharField(max_length=128, verbose_name='Идентификатор ЭДО')
@@ -212,16 +235,45 @@ class ModelDocuments(models.Model):
 
 
 class ModelWares(models.Model):
-    ware_guid = models.CharField(editable=False, default=uuid.uuid4(), max_length=64, verbose_name='GUID Продукции')
-    ware_code = models.CharField(editable=False, max_length=32, verbose_name='Артикул продукции')
-    ware_name = models.CharField(editable=False, max_length=150, verbose_name='Наименование продукции')
-    ware_data = models.CharField(editable=False, max_length=128, verbose_name='Данные ШК/Кода продукции')
-    marked = models.BooleanField(editable=False, default=0, verbose_name='Пометка удаления')
-    lvl1_qty = models.FloatField(editable=False, default=0, verbose_name='Коэффициент упаковки')
+    """
+        Справочник номенклатуры
+
+        ware_guid - Идентификатор товаро
+
+        ware_code - Код товара.
+
+        ware_name - Наименование товара
+
+        ware_data - Штрих код товара.
+
+        marked - Признак удаления товара.
+
+        lvl1_qty - Коэффициент/множитель родительской упаковки
+    """
+    ware_guid = models.CharField(primary_key=True, db_column='ware_guid', default=uuid.uuid4(), max_length=64,
+                                 verbose_name='GUID Продукции')
+    ware_code = models.CharField(max_length=32, verbose_name='Артикул продукции')
+    ware_name = models.CharField(max_length=150, verbose_name='Наименование продукции')
+    ware_data = models.CharField(max_length=128, verbose_name='Данные ШК/Кода продукции')
+    marked = models.BooleanField(default=0, verbose_name='Пометка удаления')
+    lvl1_qty = models.FloatField(default=0, verbose_name='Коэффициент упаковки')
+
+    @classmethod
+    def get_records(cls):
+        return cls.objects.values(''
+                                  'ware_guid',
+                                  'ware_code',
+                                  'ware_name',
+                                  'marked').\
+            annotate(ware_data=Max('ware_data'), lvl1_qty=Max('lvl1_qty')).\
+            order_by('ware_code')
 
     class Meta:
         db_table = 'wares'
         managed = False
+        constraints = [
+            models.UniqueConstraint(fields=['ware_guid', 'ware_data'], name="%(app_label)s_%(class)s_unique"),
+        ]
 
 
 class ModelWaresGtins(models.Model):

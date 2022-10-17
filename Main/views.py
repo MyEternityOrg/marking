@@ -41,3 +41,34 @@ class DocumentsListView(BaseClassContextMixin, ListView):
             data = {'document_date_after': dts, 'document_date_before': dts}
         self.filter_set = FilterDocumentsList(data, queryset=query_set)
         return self.filter_set.qs
+
+
+class SprtContractorsListView(BaseClassContextMixin, ListView):
+    model = ModelContractors
+    template_name = 'Main/sprt_list_contractors.html'
+    paginate_by = 30
+    title = 'Контрагенты'
+
+
+class SprtCisStatusesListView(BaseClassContextMixin, ListView):
+    model = ModelCisStatuses
+    template_name = 'Main/sprt_list_cis_statuses.html'
+    paginate_by = 30
+    title = 'Статусы КИЗ/КИТУ'
+
+
+class SprtDocumentStatusesListView(BaseClassContextMixin, ListView):
+    model = ModelDocumentStatuses
+    template_name = 'Main/sprt_list_document_statuses.html'
+    paginate_by = 30
+    title = 'Статусы проверки документов'
+
+
+class SprtWaresListView(BaseClassContextMixin, ListView):
+    model = ModelWares
+    template_name = 'Main/sprt_list_wares.html'
+    paginate_by = 30
+    title = 'Номенклатура'
+
+    def get_queryset(self):
+        return ModelWares.get_records()
