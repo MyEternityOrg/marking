@@ -106,6 +106,7 @@ class ModelContractors(models.Model):
     contractor_guid = models.CharField(primary_key=True, db_column='guid', editable=False, default=uuid.uuid4(),
                                        max_length=64,
                                        verbose_name='GUID Контрагента')
+    distributor = models.BooleanField(default=False, verbose_name='Поставщик')
     contractor_name = models.CharField(max_length=150, verbose_name='Наименование')
     contractor_inn = models.CharField(max_length=32, verbose_name='ИНН')
     contractor_count_whitelist = models.IntegerField(default=0, verbose_name='Белый список по количеству')
@@ -114,6 +115,7 @@ class ModelContractors(models.Model):
 
     def __str__(self):
         return f'{self.contractor_name} [{self.contractor_inn}]'
+
 
     class Meta:
         db_table = 'contractors'
@@ -231,6 +233,7 @@ class ModelDocuments(models.Model):
     allowed_gray_zone = models.IntegerField(default=0, db_column='allowed_grayzone',
                                             verbose_name='Разрешена серая зона')
 
+
     class Meta:
         db_table = 'documents'
         managed = False
@@ -267,8 +270,8 @@ class ModelWares(models.Model):
                                   'ware_guid',
                                   'ware_code',
                                   'ware_name',
-                                  'marked').\
-            annotate(ware_data=Max('ware_data'), lvl1_qty=Max('lvl1_qty')).\
+                                  'marked'). \
+            annotate(ware_data=Max('ware_data'), lvl1_qty=Max('lvl1_qty')). \
             order_by('ware_code')
 
     class Meta:

@@ -35,7 +35,7 @@ class FilterWares(django_filters.FilterSet):
 class FilterDocumentsList(django_filters.FilterSet):
     document_date = DateFromToRangeFilter(label='Период:',
                                           widget=DateRangeWidget(attrs={'type': 'date', 'input_type': 'date'}))
-    contractor_guid = ModelChoiceFilter(queryset=ModelContractors.objects.all().order_by('contractor_name'),
+    contractor_guid = ModelChoiceFilter(queryset=ModelContractors.objects.filter(distributor=True),
                                         label='Контрагент', empty_label='---Контрагент---')
     document_status_id = ModelChoiceFilter(queryset=ModelDocumentStatuses.objects.all().order_by('status_id'),
                                            label='Статус', empty_label='---Статус---')
