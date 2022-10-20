@@ -12,21 +12,24 @@ from .models import *
 class FilterWares(django_filters.FilterSet):
     ware_code = CharFilter(lookup_expr='contains', label='Код товара')
     ware_name = CharFilter(lookup_expr='contains', label='Наименование товара')
+    marked = BooleanFilter(label='Пометка удаления')
 
     def __init__(self, *args, **kwargs):
         super(FilterWares, self).__init__(*args, **kwargs)
         self.form.fields['ware_code'].widget.attrs['id'] = 'ware_code_id'
         self.form.fields['ware_code'].widget.attrs['class'] = 'form-control'
-        self.form.fields['ware_code'].widget.attrs['style'] = 'width: 150px'
+        self.form.fields['ware_code'].widget.attrs['style'] = 'margin-right: 10px; width: 150px'
         self.form.fields['ware_code'].widget.attrs['placeholder'] = 'ЛК'
         self.form.fields['ware_name'].widget.attrs['id'] = 'ware_code_id'
         self.form.fields['ware_name'].widget.attrs['class'] = 'form-control'
-        self.form.fields['ware_name'].widget.attrs['style'] = 'width: 250px'
+        self.form.fields['ware_name'].widget.attrs['style'] = 'margin-right: 10px; width: 250px'
         self.form.fields['ware_name'].widget.attrs['placeholder'] = 'Наименование'
+        self.form.fields['marked'].widget.attrs['class'] = 'form-control'
+        self.form.fields['marked'].widget.attrs['style'] = 'margin-right: 10px;'
 
     class Meta:
         model = ModelWares
-        fields = {'ware_code', 'ware_name'}
+        fields = {'ware_code', 'ware_name', 'marked'}
 
 
 class FilterDocumentsList(django_filters.FilterSet):
@@ -35,7 +38,7 @@ class FilterDocumentsList(django_filters.FilterSet):
     contractor_guid = ModelChoiceFilter(queryset=ModelContractors.objects.all().order_by('contractor_name'),
                                         label='Контрагент', empty_label='---Контрагент---')
     document_status_id = ModelChoiceFilter(queryset=ModelDocumentStatuses.objects.all().order_by('status_id'),
-                                           label='Статус')
+                                           label='Статус', empty_label='---Статус---')
 
     def __init__(self, *args, **kwargs):
         super(FilterDocumentsList, self).__init__(*args, **kwargs)
@@ -43,9 +46,10 @@ class FilterDocumentsList(django_filters.FilterSet):
         self.form.fields['contractor_guid'].widget.attrs['class'] = 'form-select'
         self.form.fields['contractor_guid'].widget.attrs['style'] = 'width: 30%'
         self.form.fields['contractor_guid'].widget.attrs['selected'] = 'Контрагент'
+        self.form.fields['contractor_guid'].widget.attrs['style'] = 'margin-left: 10px; margin-right: 10px;'
         self.form.fields['document_status_id'].widget.attrs['id'] = 'document_status_id'
         self.form.fields['document_status_id'].widget.attrs['class'] = 'form-select'
-        self.form.fields['document_status_id'].widget.attrs['style'] = 'width: 20%'
+        self.form.fields['document_status_id'].widget.attrs['style'] = 'margin-right: 10px; width: 20%'
         self.form.fields['document_status_id'].widget.attrs['selected'] = 'Статус'
         self.form.fields['document_date'].widget.attrs['id'] = 'date_range'
         self.form.fields['document_date'].widget.attrs['class'] = 'form-control'

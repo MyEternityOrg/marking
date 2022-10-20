@@ -13,6 +13,11 @@ class IndexPageFormView(BaseClassContextMixin, TemplateView):
     title = 'Система маркировки'
     template_name = 'Main/index.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(IndexPageFormView, self).get_context_data(**kwargs)
+        # context['tests'] = ModelDocuments.objects.values('contractor_guid').annotate(count=Count('contractor_guid'))
+        return context
+
 
 class DocumentsListView(BaseClassContextMixin, ListView):
     title = 'Система маркировки - УПД'
@@ -78,10 +83,15 @@ class SprtWaresListView(BaseClassContextMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(SprtWaresListView, self).get_context_data(**kwargs)
         context['filter'] = self.filter_set
-        context['filtered_path'] = f"?ware_code={self.request.GET.get('ware_code', '')}"
+        context['filtered_path'] = f"?ware_code={self.request.GET.get('ware_code', '')}&" \
+                                   f"ware_name={self.request.GET.get('ware_name', '')}&" \
+                                   f"marked={self.request.GET.get('marked', False)}"
         return context
 
     def get_queryset(self):
         query_set = ModelWares.get_records()
-        self.filter_set = FilterWares(self.request.GET, queryset=query_set)
+        data = self.request.GET
+        if data == {}:
+            data = {'marked': False}
+        self.filter_set = FilterWares(data, queryset=query_set)
         return self.filter_set.qs
