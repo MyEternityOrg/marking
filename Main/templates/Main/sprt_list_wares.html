@@ -3,6 +3,25 @@
 {% include 'base.html' %}
 {% block content %}
     <div class="container-fluid">
+        <div class="row row-cols-auto" style="margin-top: 33px;margin-bottom: 8px;">
+            {#            <div class="col">#}
+            {#                <button class="btn btn-outline-secondary" type="submit" id="new_record"><i#}
+            {#                        class="bi bi-plus-square"></i></button>#}
+            {#            </div>#}
+            <div class="col">
+                <form method="get">
+                    <div class="row row-cols-auto">
+                        <div class="input-group">
+                            {{ filter.form.ware_code }}
+                            {{ filter.form.ware_name }}
+                            <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-filter-square"></i>
+                                Отбор
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="card mb-4">
             <div class="card-header"><i class="bi bi-table"></i> Номенклатура</div>
             <div class="card-body">

@@ -70,5 +70,17 @@ class SprtWaresListView(BaseClassContextMixin, ListView):
     paginate_by = 30
     title = 'Номенклатура'
 
+    def __init__(self, **kwargs):
+        super(SprtWaresListView, self).__init__(**kwargs)
+        self.filter_set = None
+
+    def get_context_data(self, **kwargs):
+        context = super(SprtWaresListView, self).get_context_data(**kwargs)
+        context['filter'] = self.filter_set
+        context['filtered_path'] = f"?ware_code={self.request.GET.get('ware_code', '')}"
+        return context
+
     def get_queryset(self):
-        return ModelWares.get_records()
+        query_set = ModelWares.get_records()
+        self.filter_set = FilterWares(self.request.GET, queryset=query_set)
+        return self.filter_set.qs
