@@ -23,7 +23,7 @@ class DocumentsListView(BaseClassContextMixin, ListView):
     title = 'Система маркировки - УПД'
     template_name = 'Main/document_list_universal.html'
     model = ModelDocuments
-    paginate_by = 25
+    paginate_by = 30
 
     def __init__(self, **kwargs):
         super(DocumentsListView, self).__init__(**kwargs)
@@ -32,11 +32,12 @@ class DocumentsListView(BaseClassContextMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(DocumentsListView, self).get_context_data(**kwargs)
         context['filter'] = self.filter_set
+        f = context['filter'].data
         context[
-            'filtered_path'] = f"?document_date_after={self.request.GET.get('document_date_after', '')}&" \
-                               f"document_date_before={self.request.GET.get('document_date_before', '')}&" \
-                               f"contractor_guid={self.request.GET.get('contractor_guid', '')}&" \
-                               f"document_status_id={self.request.GET.get('document_status_id', '')}"
+            'filtered_path'] = f"?document_date_after={f.get('document_date_after', '')}&" \
+                               f"document_date_before={f.get('document_date_before', '')}&" \
+                               f"contractor_guid={f.get('contractor_guid', '')}&" \
+                               f"document_status_id={f.get('document_status_id', '')}"
         return context
 
     def get_queryset(self):
@@ -52,28 +53,28 @@ class DocumentsListView(BaseClassContextMixin, ListView):
 class SprtContractorsListView(BaseClassContextMixin, ListView):
     model = ModelContractors
     template_name = 'Main/sprt_list_contractors.html'
-    paginate_by = 30
+    paginate_by = 100
     title = 'Контрагенты'
 
 
 class SprtCisStatusesListView(BaseClassContextMixin, ListView):
     model = ModelCisStatuses
     template_name = 'Main/sprt_list_cis_statuses.html'
-    paginate_by = 30
+    paginate_by = 100
     title = 'Статусы КИЗ/КИТУ'
 
 
 class SprtDocumentStatusesListView(BaseClassContextMixin, ListView):
     model = ModelDocumentStatuses
     template_name = 'Main/sprt_list_document_statuses.html'
-    paginate_by = 30
+    paginate_by = 100
     title = 'Статусы проверки документов'
 
 
 class SprtWaresListView(BaseClassContextMixin, ListView):
     model = ModelWares
     template_name = 'Main/sprt_list_wares.html'
-    paginate_by = 30
+    paginate_by = 200
     title = 'Номенклатура'
 
     def __init__(self, **kwargs):
@@ -83,9 +84,10 @@ class SprtWaresListView(BaseClassContextMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(SprtWaresListView, self).get_context_data(**kwargs)
         context['filter'] = self.filter_set
-        context['filtered_path'] = f"?ware_code={self.request.GET.get('ware_code', '')}&" \
-                                   f"ware_name={self.request.GET.get('ware_name', '')}&" \
-                                   f"marked={self.request.GET.get('marked', False)}"
+        f = context['filter'].data
+        context['filtered_path'] = f"?ware_code={f.get('ware_code', '')}&" \
+                                   f"ware_name={f.get('ware_name', '')}&" \
+                                   f"marked={f.get('marked', False)}"
         return context
 
     def get_queryset(self):
