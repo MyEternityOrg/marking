@@ -35,7 +35,7 @@ $(document).ready(function () {
                 }
             },
         },
-        "scrollY": "70vh",
+        "scrollY": "65vh",
         "scrollCollapse": true,
         "paging": false,
         "searching": false

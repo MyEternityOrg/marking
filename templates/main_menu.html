@@ -2,9 +2,11 @@
 {% block content %}
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <div>
+            <div class="text">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <a class="nav-link" href="{% url 'Main:index' %}"><i class="bi bi-house-heart"></i></a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Main:index' %}"><i class="bi bi-house-heart"></i></a>
+                    </li>
                 </ul>
             </div>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
