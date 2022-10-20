@@ -30,7 +30,8 @@ class DocumentsListView(BaseClassContextMixin, ListView):
         context[
             'filtered_path'] = f"?document_date_after={self.request.GET.get('document_date_after', '')}&" \
                                f"document_date_before={self.request.GET.get('document_date_before', '')}&" \
-                               f"contractor_guid={self.request.GET.get('contractor_guid', '')}"
+                               f"contractor_guid={self.request.GET.get('contractor_guid', '')}&" \
+                               f"document_status_id={self.request.GET.get('document_status_id', '')}"
         return context
 
     def get_queryset(self):

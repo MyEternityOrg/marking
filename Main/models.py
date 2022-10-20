@@ -56,6 +56,9 @@ class ModelDocumentStatuses(models.Model):
                                           verbose_name='Статус документа')
     status_level = models.IntegerField(null=False, default=-1, verbose_name='Уровень статуса')
 
+    def __str__(self):
+        return f'{self.status_description} [{self.status_id}]'
+
     class Meta:
         db_table = 'document_statuses'
         managed = False

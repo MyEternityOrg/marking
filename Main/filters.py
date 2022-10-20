@@ -34,17 +34,23 @@ class FilterDocumentsList(django_filters.FilterSet):
                                           widget=DateRangeWidget(attrs={'type': 'date', 'input_type': 'date'}))
     contractor_guid = ModelChoiceFilter(queryset=ModelContractors.objects.all().order_by('contractor_name'),
                                         label='Контрагент', empty_label='---Контрагент---')
+    document_status_id = ModelChoiceFilter(queryset=ModelDocumentStatuses.objects.all().order_by('status_id'),
+                                           label='Статус')
 
     def __init__(self, *args, **kwargs):
         super(FilterDocumentsList, self).__init__(*args, **kwargs)
         self.form.fields['contractor_guid'].widget.attrs['id'] = 'contractor_guid'
         self.form.fields['contractor_guid'].widget.attrs['class'] = 'form-select'
-        self.form.fields['contractor_guid'].widget.attrs['style'] = 'width: 40%'
+        self.form.fields['contractor_guid'].widget.attrs['style'] = 'width: 30%'
         self.form.fields['contractor_guid'].widget.attrs['selected'] = 'Контрагент'
+        self.form.fields['document_status_id'].widget.attrs['id'] = 'document_status_id'
+        self.form.fields['document_status_id'].widget.attrs['class'] = 'form-select'
+        self.form.fields['document_status_id'].widget.attrs['style'] = 'width: 20%'
+        self.form.fields['document_status_id'].widget.attrs['selected'] = 'Статус'
         self.form.fields['document_date'].widget.attrs['id'] = 'date_range'
         self.form.fields['document_date'].widget.attrs['class'] = 'form-control'
         self.form.fields['document_date'].widget.attrs['style'] = 'width: 5px'
 
     class Meta:
         model = ModelDocuments
-        fields = {'contractor_guid', 'document_date'}
+        fields = {'contractor_guid', 'document_date', 'document_status_id'}
