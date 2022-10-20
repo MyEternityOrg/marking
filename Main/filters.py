@@ -44,16 +44,16 @@ class FilterDocumentsList(django_filters.FilterSet):
         super(FilterDocumentsList, self).__init__(*args, **kwargs)
         self.form.fields['contractor_guid'].widget.attrs['id'] = 'contractor_guid'
         self.form.fields['contractor_guid'].widget.attrs['class'] = 'form-select'
-        self.form.fields['contractor_guid'].widget.attrs['style'] = 'width: 30%'
+        self.form.fields['contractor_guid'].widget.attrs['style'] = 'min-width: 300px;'
         self.form.fields['contractor_guid'].widget.attrs['selected'] = 'Контрагент'
         self.form.fields['contractor_guid'].widget.attrs['style'] = 'margin-left: 10px; margin-right: 10px;'
         self.form.fields['document_status_id'].widget.attrs['id'] = 'document_status_id'
         self.form.fields['document_status_id'].widget.attrs['class'] = 'form-select'
-        self.form.fields['document_status_id'].widget.attrs['style'] = 'margin-right: 10px; width: 20%'
+        self.form.fields['document_status_id'].widget.attrs['style'] = 'margin-right: 10px; min-width: 150px;'
         self.form.fields['document_status_id'].widget.attrs['selected'] = 'Статус'
         self.form.fields['document_date'].widget.attrs['id'] = 'date_range'
         self.form.fields['document_date'].widget.attrs['class'] = 'form-control'
-        self.form.fields['document_date'].widget.attrs['style'] = 'width: 5px'
+        self.form.fields['document_date'].widget.attrs['style'] = 'min-width: 150px; max-width: 150px;'
 
     class Meta:
         model = ModelDocuments
