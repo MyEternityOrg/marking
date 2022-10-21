@@ -14,7 +14,7 @@ class FormDocuments(forms.ModelForm):
 
 
 class FormContractor(forms.ModelForm):
-    contractor_guid = forms.CharField(max_length=64, required=False, disabled=True)
+    contractor_guid = forms.CharField(max_length=64, disabled=True, required=False)
     contractor_name = forms.CharField(max_length=128)
     contractor_inn = forms.CharField(max_length=128, disabled=True, required=False)
     distributor = forms.BooleanField(required=False)
