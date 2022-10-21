@@ -107,7 +107,8 @@ class SprtContractorUpdateView(UpdateView, BaseClassContextMixin):
     success_url = reverse_lazy('Main:contractors')
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(data=request.POST, instance=self.model.objects.get(contractor_guid=self.kwargs.get('pk')))
+        form = self.form_class(data=request.POST,
+                               instance=self.model.objects.get(contractor_guid=self.kwargs.get('pk')))
         if form.is_valid():
             data = form.save()
         return redirect(self.success_url)
