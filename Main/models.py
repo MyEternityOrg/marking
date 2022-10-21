@@ -103,14 +103,14 @@ class ModelContractors(models.Model):
 
         contractor_mrc_minimal - Минимальная цена товара контрагента.
     """
-    contractor_guid = models.CharField(primary_key=True, db_column='guid', editable=False, default=uuid.uuid4(),
+    contractor_guid = models.CharField(primary_key=True, db_column='guid', default=uuid.uuid4(),
                                        max_length=64,
                                        verbose_name='GUID Контрагента')
     distributor = models.BooleanField(default=False, verbose_name='Поставщик')
     contractor_name = models.CharField(max_length=150, verbose_name='Наименование')
     contractor_inn = models.CharField(max_length=32, verbose_name='ИНН')
-    contractor_count_whitelist = models.IntegerField(default=0, verbose_name='Белый список по количеству')
-    contractor_quality_whitelist = models.IntegerField(default=0, verbose_name='Белый список по качеству')
+    contractor_count_whitelist = models.BooleanField(default=False, verbose_name='Белый список по количеству')
+    contractor_quality_whitelist = models.BooleanField(default=False, verbose_name='Белый список по качеству')
     contractor_mrc_minimal = models.IntegerField(default=0, verbose_name='Контролировать минимальную МРЦ')
 
     def __str__(self):

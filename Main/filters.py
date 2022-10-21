@@ -18,14 +18,14 @@ class FilterWares(django_filters.FilterSet):
         super(FilterWares, self).__init__(*args, **kwargs)
         self.form.fields['ware_code'].widget.attrs['id'] = 'ware_code_id'
         self.form.fields['ware_code'].widget.attrs['class'] = 'form-control'
-        self.form.fields['ware_code'].widget.attrs['style'] = 'margin-right: 10px; width: 150px'
+        self.form.fields['ware_code'].widget.attrs['style'] = 'margin-right: 10px; min-width: 150px;'
         self.form.fields['ware_code'].widget.attrs['placeholder'] = 'ЛК'
         self.form.fields['ware_name'].widget.attrs['id'] = 'ware_code_id'
         self.form.fields['ware_name'].widget.attrs['class'] = 'form-control'
-        self.form.fields['ware_name'].widget.attrs['style'] = 'margin-right: 10px; width: 250px'
+        self.form.fields['ware_name'].widget.attrs['style'] = 'margin-right: 10px; min-width: 300px;'
         self.form.fields['ware_name'].widget.attrs['placeholder'] = 'Наименование'
-        self.form.fields['marked'].widget.attrs['class'] = 'form-control'
-        self.form.fields['marked'].widget.attrs['style'] = 'margin-right: 10px;'
+        self.form.fields['marked'].widget.attrs['class'] = 'form-select'
+        self.form.fields['marked'].widget.attrs['style'] = 'margin-right: 10px; min-width: 100px;'
 
     class Meta:
         model = ModelWares

@@ -1,27 +1,26 @@
+{% extends 'base.html' %}
 {% load static %}
 {% load verbose_names %}
-{% include 'base.html' %}
 {% block content %}
     <div class="container-fluid">
-        <div class="row row-cols-auto" style="margin-top: 33px;margin-bottom: 8px;">
-            <div class="col">
-                <form method="get">
-                    <div class="row row-cols-auto">
-                        <div class="input-group">
-                            {{ filter.form.ware_code }}
-                            {{ filter.form.ware_name }}
-                            <label class="col-form-label" style="margin-right: 10px;">Пометка удаления:</label>
-                            {{ filter.form.marked }}
-                            <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-filter-square"></i>
-                                Отбор
-                            </button>
-                        </div>
+        <div class="row row-cols-auto" style="margin-top: 5px;margin-bottom: 5px;">
+            <form method="get">
+                <label for="select_group" class="col-form-label" style="margin-right: 10px;">Настройки отбора:</label>
+                <div id="select_group" class="row row-cols-auto">
+                    <div class="input-group">
+                        {{ filter.form.ware_code }}
+                        {{ filter.form.ware_name }}
+                        <label class="col-form-label" style="margin-right: 10px;">Пометка удаления:</label>
+                        {{ filter.form.marked }}
+                        <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-filter-square"></i>
+                            Отбор
+                        </button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
         <div class="card mb-4">
-            <div class="card-header"><i class="bi bi-table"></i> Номенклатура</div>
+            <div class="card-header small"><i class="bi bi-table"></i> Номенклатура</div>
             <div class="card-body">
                 <table id="datatable" class="table table-bordered table-hover table-striped table-sm">
                     <thead>
@@ -48,5 +47,5 @@
     </div>
 {% endblock %}
 {% block script %}
-   <script src="{% static 'own/datatables_styled.js' %}"></script>
+    <script src="{% static 'own/datatables_styled.js' %}"></script>
 {% endblock %}

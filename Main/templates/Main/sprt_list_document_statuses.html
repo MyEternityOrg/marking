@@ -1,10 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
 {% load verbose_names %}
-{% include 'base.html' %}
 {% block content %}
     <div class="container-fluid">
-        <div class="card mb-4">
-            <div class="card-header"><i class="bi bi-table"></i> Статусы проверки документов</div>
+        <div class="card mb-4" style="margin-top: 5px;margin-bottom: 5px;">
+            <div class="card-header small"><i class="bi bi-table"></i> Статусы проверки документов</div>
             <div class="card-body">
                 <table id="datatable" class="table table-bordered table-hover table-striped table-sm">
                     <thead>
@@ -31,5 +31,5 @@
     </div>
 {% endblock %}
 {% block script %}
-   <script src="{% static 'own/datatables_styled.js' %}"></script>
+    <script src="{% static 'own/datatables_styled.js' %}"></script>
 {% endblock %}

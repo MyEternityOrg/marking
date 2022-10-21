@@ -1,0 +1,73 @@
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <form action="{% url 'Main:contractors_record' object.contractor_guid %}" method="post"
+              enctype="multipart/form-data"
+              id="record_update">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Изменить запись</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <label class="form-label" for="{{ form.contractor_guid.id_for_label }}">Идентификатор
+                        контрагента:</label>
+                    <div class="form-group">
+                        {{ form.contractor_guid }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.contractor_name.id_for_label }}"> Наименование
+                            контрагента:</label>
+                        {{ form.contractor_name }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.contractor_inn.id_for_label }}"> ИНН
+                            контрагента:</label>
+                        {{ form.contractor_inn }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.distributor }}
+                        <label class="form-check-label" for="{{ form.distributor.id_for_label }}"> Поставщик
+                            продукции</label>
+                    </div>
+                    <div class="form-check">
+                        {{ form.contractor_count_whitelist }}
+                        <label class="form-check-label" for="{{ form.contractor_count_whitelist.id_for_label }}">
+                            Исключить
+                            проверку количества</label>
+                    </div>
+                    <div class="form-check">
+                        {{ form.contractor_quality_whitelist }}
+                        <label class="form-check-label" for="{{ form.contractor_quality_whitelist.id_for_label }}">
+                            Исключить
+                            проверку качества</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.contractor_mrc_minimal.id_for_label }}"> МЗЦ (Мин.
+                            закупочная цена):
+                        </label>
+                        {{ form.contractor_mrc_minimal }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-check"></i>
+                    &nbsp;Сохранить
+                </button>
+                <button class="btn btn-outline-secondary" id="close_modal" type="button"><i
+                        class="bi bi-door-closed"></i>
+                    &nbsp;Закрыть
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        document.getElementById('close_modal').addEventListener('click', function (e) {
+            $("#ModalWindow").modal("hide");
+            $("#ModalWindow .modal-body").html("");
+        });
+    </script>
+{% endblock %}

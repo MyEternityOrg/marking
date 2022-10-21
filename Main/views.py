@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, DetailView, ListView, TemplateView
-from django.views.generic.edit import BaseFormView
+from django.views.generic.edit import BaseFormView, UpdateView
 
 from Marking.mixin import *
 from .models import *
@@ -97,3 +97,17 @@ class SprtWaresListView(BaseClassContextMixin, ListView):
             data = {'marked': False}
         self.filter_set = FilterWares(data, queryset=query_set)
         return self.filter_set.qs
+
+
+class SprtContractorUpdateView(UpdateView, BaseClassContextMixin):
+    title = 'Обновить данные контрагента'
+    model = ModelContractors
+    template_name = 'Main/spt_update_contractors.html'
+    form_class = FormContractor
+    success_url = reverse_lazy('Main:contractors')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(data=request.POST, instance=self.model.objects.get(contractor_guid=self.kwargs.get('pk')))
+        if form.is_valid():
+            data = form.save()
+        return redirect(self.success_url)
