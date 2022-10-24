@@ -1,4 +1,6 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import FormView, DetailView, ListView, TemplateView
 from django.views.generic.edit import BaseFormView, UpdateView
@@ -112,3 +114,18 @@ class SprtContractorUpdateView(UpdateView, BaseClassContextMixin):
         if form.is_valid():
             data = form.save()
         return redirect(self.success_url)
+
+
+def save_contractor_data(request):
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    if is_ajax:
+        obj = ModelContractors.objects.get(contractor_guid=request.POST['contractor_guid'])
+        obj.contractor_name = request.POST['contractor_name']
+        obj.contractor_quality_whitelist = request.POST['contractor_quality_whitelist']
+        obj.contractor_count_whitelist = request.POST['contractor_count_whitelist']
+        obj.distributor = request.POST['distributor']
+        obj.contractor_mrc_minimal = request.POST['contractor_mrc_minimal']
+        print(render_to_string('Main/inc/sprt_list_contractors_line.html', {'item': obj}))
+        return JsonResponse(
+            {'result': 1, 'object': obj.contractor_guid,
+             'data': render_to_string('Main/inc/sprt_list_contractors_line.html', {'item': obj})})

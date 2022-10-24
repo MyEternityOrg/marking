@@ -20,15 +20,7 @@
                     </thead>
                     <tbody>
                     {% for item in object_list %}
-                        <tr class="clickable-row_unp" id="update_record"
-                            data-href="{% url 'Main:contractors_record' item.contractor_guid %}">
-                            <td>{{ item.contractor_name }}</td>
-                            <td>{{ item.contractor_inn }}</td>
-                            <td>{% if not item.distributor %} Нет {% else %} Да {% endif %}</td>
-                            <td>{% if not item.contractor_count_whitelist %} Нет {% else %} Да {% endif %}</td>
-                            <td>{% if not item.contractor_quality_whitelist %} Нет {% else %} Да {% endif %}</td>
-                            <td>{{ item.contractor_mrc_minimal }}</td>
-                        </tr>
+                        {% include 'Main/inc/sprt_list_contractors_line.html' %}
                     {% endfor %}
                     </tbody>
                 </table>
@@ -41,5 +33,5 @@
 {% block script %}
     <script src="{% static 'own/datatables_styled.js' %}"></script>
     <script src="{% static 'own/modal_open_exist.js' %}"></script>
-    <script src="{% static 'own/modal_open_new.js' %}"></script>
+{#    <script src="{% static 'own/modal_open_new.js' %}"></script>#}
 {% endblock %}

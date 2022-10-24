@@ -1,0 +1,9 @@
+<tr class="clickable-row_unp" id="{{ item.contractor_guid }}"
+    data-href="{% url 'Main:contractors_record' item.contractor_guid %}">
+    <td>{{ item.contractor_name }}</td>
+    <td>{{ item.contractor_inn }}</td>
+    <td>{% if not item.distributor %} Нет {% else %} Да {% endif %}</td>
+    <td>{% if not item.contractor_count_whitelist %} Нет {% else %} Да {% endif %}</td>
+    <td>{% if not item.contractor_quality_whitelist %} Нет {% else %} Да {% endif %}</td>
+    <td>{{ item.contractor_mrc_minimal }}</td>
+</tr>
