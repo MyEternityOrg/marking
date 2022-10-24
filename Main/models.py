@@ -255,6 +255,8 @@ class ModelWares(models.Model):
         marked - Признак удаления товара.
 
         lvl1_qty - Коэффициент/множитель родительской упаковки
+
+        weight - Весовой или штучный
     """
     ware_guid = models.CharField(primary_key=True, db_column='ware_guid', default=uuid.uuid4(), max_length=64,
                                  verbose_name='GUID Продукции')
@@ -263,6 +265,7 @@ class ModelWares(models.Model):
     ware_data = models.CharField(max_length=128, verbose_name='Данные ШК/Кода продукции')
     marked = models.BooleanField(default=0, verbose_name='Пометка удаления')
     lvl1_qty = models.FloatField(default=0, verbose_name='Коэффициент упаковки')
+    weight = models.BooleanField(default=0, db_column='weigth', verbose_name='Весовой')
 
     @classmethod
     def get_records(cls):
@@ -270,7 +273,8 @@ class ModelWares(models.Model):
                                   'ware_guid',
                                   'ware_code',
                                   'ware_name',
-                                  'marked'). \
+                                  'marked',
+                                  'weight'). \
             annotate(ware_data=Max('ware_data'), lvl1_qty=Max('lvl1_qty')). \
             order_by('ware_code')
 

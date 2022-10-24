@@ -27,6 +27,7 @@
                     <tr>
                         <th scope="col">Код товара</th>
                         <th scope="col">Наименование товара</th>
+                        <th scope="col">Весовой</th>
                         <th scope="col">Удален</th>
                     </tr>
                     </thead>
@@ -36,6 +37,7 @@
                             data-href="#">
                             <td>{{ item.ware_code }}</td>
                             <td>{{ item.ware_name }}</td>
+                            <td>{% if item.weight %} Да {% else %} Нет {% endif %}</td>
                             <td>{% if item.marked %} Да {% else %} Нет {% endif %}</td>
                         </tr>
                     {% endfor %}
