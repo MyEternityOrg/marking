@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="text-black">
+            <p></p>
+            <h4 class="shadow-sm align-baseline">Успешный выход из системы</h4>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="text-black">
+            <a href="{% url "Users:login" %}">Войти</a>
+        </div>
+    </div>
+{% endblock %}
