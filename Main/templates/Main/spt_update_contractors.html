@@ -1,7 +1,7 @@
 {% load static %}
 {% block content %}
     <div class="container-fluid">
-{#        <form action="{% url 'Main:contractors_record' object.contractor_guid %}" method="post"#}
+        {#        <form action="{% url 'Main:contractors_record' object.contractor_guid %}" method="post"#}
         <form method="post"
               enctype="multipart/form-data"
               id="record_update">
@@ -53,7 +53,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary" type="button" onclick="save_modal_data()"><i class="bi bi-check"></i>
+                <button class="btn btn-outline-secondary" type="button"
+                        onclick="save_modal_data('{% url 'Main:contractors_record_save' %}')"><i
+                        class="bi bi-check"></i>
                     &nbsp;Сохранить
                 </button>
                 <button class="btn btn-outline-secondary" id="close_modal" type="button"><i
@@ -65,6 +67,7 @@
     </div>
 {% endblock %}
 {% block script %}
+    <script src="{% static 'own/form_serialize.js' %}"></script>
     <script>
         document.getElementById('close_modal').addEventListener('click', function (e) {
             $("#ModalWindow").modal("hide");
@@ -72,31 +75,23 @@
         });
     </script>
     <script>
-        function save_modal_data() {
-            let f_obj_guid = "{{ object.contractor_guid }}";
+        function save_modal_data(_url) {
             $.ajax({
                     type: "POST",
                     dataType: 'json',
-                    url: '{% url 'Main:save_contractor_data' %}',
-                    data: $("#record_update").serialize(),
-                    {#    {#}
-                    {#    csrfmiddlewaretoken: '{{ csrf_token }}',#}
-                    {#    'contractor_guid': f_obj_guid,#}
-                    {#    'contractor_name': document.getElementById("{{form.contractor_name.id_for_label}}").value,#}
-                    {#    'contractor_quality_whitelist': document.getElementById("{{form.contractor_quality_whitelist.id_for_label}}").checked ? 1: 0,#}
-                    {#    'contractor_count_whitelist': document.getElementById("{{form.contractor_count_whitelist.id_for_label}}").checked ? 1: 0,#}
-                    {#    'distributor': document.getElementById("{{form.distributor.id_for_label}}").checked ? 1: 0,#}
-                    {#    'contractor_mrc_minimal': document.getElementById("{{form.contractor_mrc_minimal.id_for_label}}").value,#}
-
-                    success: function callback(response) {
-                        if (response.result === 1) {
-                            document.getElementById(response.object).innerHTML = response.data
-                            $("#ModalWindow").modal("hide");
-                            $("#ModalWindow .modal-content").html('');
+                    url: _url,
+                    data: get_form_serialize("#ModalWindow"),
+                    success:
+                        function callback(response) {
+                            if (response.result === 1) {
+                                document.getElementById(response.object).innerHTML = response.data
+                                $("#ModalWindow").modal("hide");
+                                $("#ModalWindow .modal-content").html('');
+                            }
                         }
-                    }
                 }
-            );
+            )
+            ;
         }
     </script>
 {% endblock %}

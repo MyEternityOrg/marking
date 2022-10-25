@@ -10,9 +10,11 @@ app_name = 'Main'
 urlpatterns = [
     path('', IndexPageFormView.as_view(), name='index'),
     path('documents/', DocumentsListView.as_view(), name='documents'),
+
     path('sprt/contractors/', SprtContractorsListView.as_view(), name='contractors'),
-    path('sprt/contractors/save_contractor_data/', save_contractor_data, name='save_contractor_data'),
     path('sprt/contractors/modify/<pk>', SprtContractorUpdateView.as_view(), name='contractors_record'),
+    path('sprt/contractors/save_contractor_data/', SprtContractorUpdateView.as_view(), name='contractors_record_save'),
+
     path('sprt/cis_statuses/', SprtCisStatusesListView.as_view(), name='cis_statuses'),
     path('sprt/documents_statuses/', SprtDocumentStatusesListView.as_view(), name='document_statuses'),
     path('sprt/wares/', SprtWaresListView.as_view(), name='wares'),

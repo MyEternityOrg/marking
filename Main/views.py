@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -108,24 +108,23 @@ class SprtContractorUpdateView(UpdateView, BaseClassContextMixin):
     form_class = FormContractor
     success_url = reverse_lazy('Main:contractors')
 
+    def __init__(self, **kwargs):
+        super(SprtContractorUpdateView, self).__init__(**kwargs)
+        self.object = None
+        self.is_ajax = False
+
     def post(self, request, *args, **kwargs):
+        self.is_ajax = True if request.headers.get('X-Requested-With') == 'XMLHttpRequest' else False
         form = self.form_class(data=request.POST,
-                               instance=self.model.objects.get(contractor_guid=self.kwargs.get('pk')))
+                               instance=self.model.objects.get(contractor_guid=request.POST['contractor_guid']))
         if form.is_valid():
-            data = form.save()
+            if self.is_ajax:
+                self.object = form.save()
+                return JsonResponse(
+                    {'result': 1, 'object': self.object.contractor_guid,
+                     'data': render_to_string('Main/inc/sprt_list_contractors_line.html', {'item': self.object})})
+
+        else:
+            if self.is_ajax:
+                return JsonResponse({'result': 1, 'errors': form.errors})
         return redirect(self.success_url)
-
-
-def save_contractor_data(request):
-    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-    if is_ajax:
-        obj = ModelContractors.objects.get(contractor_guid=request.POST['contractor_guid'])
-        obj.contractor_name = request.POST['contractor_name']
-        obj.contractor_quality_whitelist = request.POST['contractor_quality_whitelist']
-        obj.contractor_count_whitelist = request.POST['contractor_count_whitelist']
-        obj.distributor = request.POST['distributor']
-        obj.contractor_mrc_minimal = request.POST['contractor_mrc_minimal']
-        print(render_to_string('Main/inc/sprt_list_contractors_line.html', {'item': obj}))
-        return JsonResponse(
-            {'result': 1, 'object': obj.contractor_guid,
-             'data': render_to_string('Main/inc/sprt_list_contractors_line.html', {'item': obj})})
