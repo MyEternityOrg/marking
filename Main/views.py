@@ -123,7 +123,6 @@ class SprtContractorUpdateView(UpdateView, BaseClassContextMixin):
                 return JsonResponse(
                     {'result': 1, 'object': self.object.contractor_guid,
                      'data': render_to_string('Main/inc/sprt_list_contractors_line.html', {'item': self.object})})
-
         else:
             if self.is_ajax:
                 return JsonResponse({'result': 1, 'errors': form.errors})
