@@ -10,9 +10,11 @@
                     <div class="input-group">
                         {{ filter.form.ware_code }}
                         {{ filter.form.ware_name }}
-                        <label class="col-form-label" style="margin-right: 10px;">Пометка удаления:</label>
+                        <label class="col-form-label" style="margin-left: 15px; margin-right: 5px">Пометка
+                            удаления:</label>
                         {{ filter.form.marked }}
-                        <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-filter-square"></i>
+                        <button class="btn btn-outline-secondary" type="submit" style="margin-left: 10px"><i
+                                class="bi bi-filter-square"></i>
                             Отбор
                         </button>
                     </div>
@@ -50,4 +52,9 @@
 {% endblock %}
 {% block script %}
     <script src="{% static 'own/datatables_styled.js' %}"></script>
+    <script src="{% static 'plugins/jquery-clear-button/jquery-clear-button.js' %}"></script>
+    <script>
+        $('#ware_code_id').jQueryClearButton();
+        $('#ware_name_id').jQueryClearButton();
+    </script>s
 {% endblock %}

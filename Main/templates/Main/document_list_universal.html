@@ -12,6 +12,7 @@
                         {{ filter.form.document_date }}
                         {{ filter.form.contractor_guid }}
                         {{ filter.form.document_status_id }}
+                        {{ filter.form.document_id }}
                         <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-filter-square"></i>
                             Отбор
                         </button>
@@ -54,4 +55,8 @@
 {% endblock %}
 {% block script %}
     <script src="{% static 'own/datatables_styled.js' %}"></script>
+    <script src="{% static 'plugins/jquery-clear-button/jquery-clear-button.js' %}"></script>
+    <script>
+        $('#document_id').jQueryClearButton();
+    </script>
 {% endblock %}

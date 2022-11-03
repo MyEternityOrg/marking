@@ -39,6 +39,7 @@ class DocumentsListView(BaseClassContextMixin, ListView):
             'filtered_path'] = f"?document_date_after={f.get('document_date_after', '')}&" \
                                f"document_date_before={f.get('document_date_before', '')}&" \
                                f"contractor_guid={f.get('contractor_guid', '')}&" \
+                               f"document_id={f.get('document_id', '')}&" \
                                f"document_status_id={f.get('document_status_id', '')}"
         return context
 
