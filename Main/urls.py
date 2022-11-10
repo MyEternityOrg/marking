@@ -6,6 +6,7 @@ from django.views.generic.base import RedirectView
 from .views import *
 
 app_name = 'Main'
+app_label = 'Main'
 
 urlpatterns = [
     path('', IndexPageFormView.as_view(), name='index'),

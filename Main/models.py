@@ -26,6 +26,8 @@ class ModelCisStatuses(models.Model):
 
     class Meta:
         db_table = 'cis_statuses'
+        verbose_name = "Статус КИ/КИЗ"
+        verbose_name_plural = "Статусы КИ/КИЗ"
         managed = False
 
 

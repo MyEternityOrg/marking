@@ -2,16 +2,8 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 # Create your models here.
-
-from django.contrib.auth.models import AbstractUser
-
-
-class User(AbstractUser):
-    email = models.EmailField(null=False, unique=True, db_index=True, verbose_name='Электронная почта')
-
-    def __str__(self):
-        return f'{self.username}, ' \
-               f'email {self.email}'
+# from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 
 class UserProfile(models.Model):
@@ -45,3 +37,8 @@ class UserProfile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.userprofile.save()
+
+    class Meta:
+        db_table = 'auth_profile'
+        verbose_name = "Профиль"
+        verbose_name_plural = "Профили"

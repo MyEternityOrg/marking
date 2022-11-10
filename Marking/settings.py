@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Main.apps.MainConfig',
+    'Main',
     'django_filters',
     'Users'
 ]
@@ -129,4 +129,4 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-AUTH_USER_MODEL = 'Users.User'
+# AUTH_USER_MODEL = 'Users.User'
