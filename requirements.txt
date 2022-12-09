@@ -1,6 +1,6 @@
 Django==4.0.8
 asgiref==3.5.2
-certifi==2022.9.24
+certifi==2022.12.7
 chardet==5.1.0
 django-smart-selects==1.6.0
 django-widget-tweaks==1.4.12
