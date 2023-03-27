@@ -14,4 +14,4 @@ sqlparse==0.4.3
 urllib3==1.26.14
 mssql-django==1.2
 python-dotenv==0.21.1
-django-filter~=22.1
+django-filter~=23.1
